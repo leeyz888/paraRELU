@@ -3,7 +3,7 @@
 ## Previously I have talked about ANNs in vectorized form. In this project , I would like to explore how to create ANNs with Parametric RELU as the activation for the hidden layers.
 
 <aside>
-⚠️ Do refer to this link for my first project on creating ANNs using vectorization approach :  [https://leeyz888.github.io/6-hidden-layer/](https://leeyz888.github.io/6-hidden-layer/)
+⚠️ Do refer to this link for my first project on creating ANNs using vectorization approach : https://leeyz888.github.io/6-hidden-layer/
 
 </aside>
 
