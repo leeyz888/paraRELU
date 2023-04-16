@@ -1,0 +1,1113 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Parametric RELU ANNs</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="842025a4-96a1-48c0-a47e-f6ba46f03cd6" class="page sans"><header><img class="page-cover-image" src="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/R.png" style="object-position:center 50%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">👾</span></div><h1 class="page-title">Parametric RELU ANNs</h1></header><div class="page-body"><h2 id="f0586843-5644-44cd-910c-2af8fd810745" class="">Previously I have talked about ANNs in vectorized form. In this project , I would like to explore how to create ANNs with Parametric RELU as the activation for the hidden layers. </h2><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="441ab38f-d352-4dd4-80a6-a14e4671b513"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%">Do refer to this link for my first project on creating ANNs using vectorization approach :  <a href="https://leeyz888.github.io/6-hidden-layer/">https://leeyz888.github.io/6-hidden-layer/</a></div></figure><nav id="2b105ed8-dd2f-4a46-9335-a4a170ee137c" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f0586843-5644-44cd-910c-2af8fd810745">Previously I have talked about ANNs in vectorized form. In this project , I would like to explore how to create ANNs with Parametric RELU as the activation for the hidden layers. </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ab416246-2e95-49ef-b8e9-ee41104898ae">1)Dataset description</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#91027b69-dd81-4db2-94f2-fe65e61b588a">First , let’s talk a bit about the dataset I plan to use.</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f203f628-bdf1-4749-884f-831966d8c7af">2)Network architecture </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c2d1f3c2-a144-499f-98b1-c1e670692c5d">3) Derivation of the derivative of the loss w.r.t to Parametric ReLU</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#61ade717-2644-40b8-8485-3c75aae1a245">The parametric ReLU in piecewise form, along with its derivative. </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#255ec86a-0d01-4fb8-8ef3-278b35832cd6">Let’s start by deriving the formula for shared-alpha. </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#216be974-fe40-4f99-aabc-089774cf11a0">In vectorized form, the formula is </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#00da80ec-f2a1-4931-8780-4c1fab62b32c">For channel wise alpha:</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#537ce349-5dd6-43a9-bafd-e522e169283b">In vectorized form , the formula is:</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f5e31652-e8e6-4640-8d00-a59ece8b1a36">4) Implementation in TensorFlow by constructing a 6 hidden layer ANN</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#75a44175-75d5-458b-8960-5cdf45760405">Shared alpha:</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#79ad92d7-90bf-4559-9a50-987073ffcc3f">Channel-wise alpha</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#79092803-7cfc-4586-abf9-693bb031b595">5) Miscellaneous codes</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ae64b294-2cee-4365-a4cd-0b9c2da28b1b">6) Analysis of the performances of both ANNs</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#37cc89cc-2cf6-44a9-927e-7c0b5639f784">Let’s investigate the losses , training and dev accuracies of both networks.</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#69ec4495-2adf-4aa9-9eaa-3ff849b8745b">For channel-wise alpha:</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#76a3c17e-9e72-40fb-b152-c311e2459f60">Shared alpha</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#4474b5e1-8f0e-4782-8568-d9b458c54b4d">6) Conclusion</a></div></nav><h2 id="ab416246-2e95-49ef-b8e9-ee41104898ae" class="">1)Dataset description</h2><h3 id="91027b69-dd81-4db2-94f2-fe65e61b588a" class="">First , let’s talk a bit about the dataset I plan to use.</h3><ul id="ccd1d72b-55be-4461-9f7b-4cff3ec649be" class="bulleted-list"><li style="list-style-type:disc">It’s the MNST dataset I used previously. </li></ul><ul id="2240e2b9-2f06-416c-b4e2-5c7e88cf4ec8" class="bulleted-list"><li style="list-style-type:disc">The difference is that for this dataset the images have dimensions 28x28, i.e each data has 784 features. The images are in grayscale color.  </li></ul><ul id="aa188df1-0355-4249-a8a7-016824a0f096" class="bulleted-list"><li style="list-style-type:disc">It will be loaded via using the Keras library. The dataset has 60000 training data and 10000 testing data . </li></ul><ul id="d7873230-da4e-44ca-a4cc-777f9ed79098" class="bulleted-list"><li style="list-style-type:disc">The data will NOT be used as numpy arrays but will be loaded into Python as a Tensor object. </li></ul><h2 id="f203f628-bdf1-4749-884f-831966d8c7af" class="">2)Network architecture </h2><ul id="b6efe410-d4dd-4539-8a24-0bdb48a7ca75" class="bulleted-list"><li style="list-style-type:disc">Do refer to my first project to get a general idea on how I plan to structure my network.</li></ul><ul id="615ae811-0a37-476e-841b-725ae0d63f0c" class="bulleted-list"><li style="list-style-type:disc">In general , the activation for the hidden layers will now be Parametric ReLU, instead of just normal ReLU. The activation for the output however will still be SoftMax. </li></ul><ul id="51e8e6c3-62a2-40f8-a7c5-1430ae477986" class="bulleted-list"><li style="list-style-type:disc">The parametric ReLU has the formula <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">(</mo><mi>X</mi><mo separator="true">,</mo><mn>0</mn><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mi>a</mi><mi>l</mi><mi>p</mi><mi>h</mi><mi>a</mi><mo stretchy="false">)</mo><mo>∗</mo><mo stretchy="false">(</mo><mi>m</mi><mi>i</mi><mi>n</mi><mo stretchy="false">(</mo><mi>X</mi><mo separator="true">,</mo><mn>0</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">max(X,0)+((alpha)*(min(X,0))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ma</span><span class="mord mathnormal">x</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">((</span><span class="mord mathnormal">a</span><span class="mord mathnormal">lp</span><span class="mord mathnormal">ha</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">min</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mclose">))</span></span></span></span></span><span>﻿</span></span> . </li></ul><ul id="832806cc-b4ef-4400-b97b-0b947743e21d" class="bulleted-list"><li style="list-style-type:disc">I.e , for positive values , the Parametric ReLU will output the value unchanged. </li></ul><ul id="151fef95-759e-4e9d-a347-53333f31a3ee" class="bulleted-list"><li style="list-style-type:disc">For negative values however , the Parametric ReLU will output the negative value multiplied by a parameter alpha, denoted by α. </li></ul><h2 id="c2d1f3c2-a144-499f-98b1-c1e670692c5d" class="">3) Derivation of the derivative of the loss w.r.t to Parametric ReLU</h2><ul id="fdd4a3f8-d248-4b48-b3eb-ea35b849d918" class="bulleted-list"><li style="list-style-type:disc">Assuming that the derivative of the loss function w.r.t to each activation in the hidden layer of the ANN exists.</li></ul><ul id="c097a5f2-405c-4cec-a150-78692c33a16c" class="bulleted-list"><li style="list-style-type:disc">There are 2 types of derivations that can be used, depending on whether the alpha is shared across all hidden nodes, or that for each hidden node there exists a separate alpha.</li></ul><ul id="8bf8a9eb-5438-44d7-ae17-60d3bd4761cf" class="bulleted-list"><li style="list-style-type:disc">The former is known as <strong>shared-alpha</strong>, while the latter is known as <strong>channel wise alpha</strong>. </li></ul><h3 id="61ade717-2644-40b8-8485-3c75aae1a245" class="">The parametric ReLU in piecewise form, along with its derivative. </h3><figure id="7c8acaa0-2bb9-49e0-948b-3d52b1e5f8c9" class="image"><a href="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/%25E6%2588%25AA%25E5%25B1%258F_2023-04-16_%25E4%25B8%258B%25E5%258D%25881.13.26.png"><img style="width:694px" src="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/%25E6%2588%25AA%25E5%25B1%258F_2023-04-16_%25E4%25B8%258B%25E5%258D%25881.13.26.png"/></a></figure><p id="cd8131d6-81b8-4c8a-a0a6-2af5406c332a" class="">
+</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="39e5af30-5d4a-4b77-8461-087818e6a168"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Z_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> is the output of the hidden layer i before it is passed into the activation , which in this case is the Parametric ReLU. </div></figure><h2 id="255ec86a-0d01-4fb8-8ef3-278b35832cd6" class="">Let’s start by deriving the formula for shared-alpha. </h2><figure id="36626ed4-ca17-448a-8de6-fd20df82264a" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.1600em" columnspacing="1em"><mtr><mtd class ="mtr-glue"></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>α</mi><msub><mi>h</mi><mi>i</mi></msub></msub></mrow></mfrac><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>H</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></munderover><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>H</mi><mi>i</mi></msub></munderover><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>z</mi><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>j</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow></mfrac><mfrac><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>z</mi><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>j</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>a</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mi>k</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow></mfrac><mfrac><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>a</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mi>k</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>α</mi><msub><mi>h</mi><mi>i</mi></msub></msub></mrow></mfrac></mrow></mstyle></mtd><mtd class ="mtr-glue"></mtd><mtd class ="mml-eqn-num"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation} \frac{\partial L}{\partial \alpha_{h_i}} = \sum_{j=1}^{H_{i+1}}\sum_{k=1}^{H_{i}} \sum_{m=1}^{M} \frac{\partial L}{\partial z_{h_{i+1}j}^{(m)}} \frac{\partial z_{h_{i+1}j}^{(m)}}{\partial a_{h_{i}k}^{(m)}} \frac{\partial a_{h_{i}k}^{(m)}}{\partial \alpha_{{h_i}}} \end{equation}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.2948780000000006em;vertical-align:-1.397439em;"></span><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8974390000000005em;"><span style="top:-3.8974390000000003em;"><span class="pstrut" style="height:3.8811010000000006em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.37144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9361em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8811010000000006em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3527700000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.08125em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.839436em;"><span style="top:-1.8478869999999998em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.311105em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.08125em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.302113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.37144em;"><span style="top:-2.11em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.44307299999999994em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.2748em;"><span class="pstrut" style="height:3.0448em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.7218em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.377873em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8778730000000001em;"><span style="top:-2.11em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4014079999999999em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.2748em;"><span class="pstrut" style="height:3.0448em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.877873em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.44307299999999994em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.3362079999999998em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8362079999999998em;"><span style="top:-2.3587999999999996em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.2748em;"><span class="pstrut" style="height:3.0448em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.836208em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.40140799999999993em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9361em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.397439em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8974390000000005em;"><span style="top:-3.8974390000000003em;"><span class="pstrut" style="height:3.8811010000000006em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.397439em;"><span></span></span></span></span></span></span></span></span></div></figure><figure id="29a840f1-ed44-4696-b06d-8647442e2bf5" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.1600em" columnspacing="1em"><mtr><mtd class ="mtr-glue"></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>α</mi><msub><mi>h</mi><mi>i</mi></msub></msub></mrow></mfrac><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>H</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></munderover><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>H</mi><mi>i</mi></msub></munderover><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><msubsup><mrow><mi>d</mi><mi>z</mi></mrow><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><mi>j</mi></mrow><mi>m</mi></msubsup><msub><mi>W</mi><mrow><mrow><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>k</mi></mrow><mo>→</mo><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><mi>j</mi></mrow></mrow></msub><mfrac><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>a</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mi>k</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>α</mi><msub><mi>h</mi><mi>i</mi></msub></msub></mrow></mfrac></mrow></mstyle></mtd><mtd class ="mtr-glue"></mtd><mtd class ="mml-eqn-num"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation} \frac{\partial L}{\partial \alpha_{h_i}} = \sum_{j=1}^{H_{i+1}}\sum_{k=1}^{H_{i}} \sum_{m=1}^{M} {dz}^{m}_{h_{i+1},{j}} W_{{h_{i},k}\to {h_{i+1},j}} \frac{\partial a_{h_{i}k}^{(m)}}{\partial \alpha_{{h_i}}} \end{equation}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.2948780000000006em;vertical-align:-1.397439em;"></span><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8974390000000005em;"><span style="top:-3.8974390000000003em;"><span class="pstrut" style="height:3.8811010000000006em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.37144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9361em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8811010000000006em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3527700000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.08125em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.839436em;"><span style="top:-1.8478869999999998em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.311105em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.08125em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.302113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.748732em;"><span style="top:-2.453em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span style="top:-3.1473400000000002em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.388765em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span><span class="mrel mtight">→</span><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.291765em;"><span></span></span></span></span></span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8362079999999998em;"><span style="top:-2.3587999999999996em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.2748em;"><span class="pstrut" style="height:3.0448em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.836208em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.40140799999999993em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9361em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.397439em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8974390000000005em;"><span style="top:-3.8974390000000003em;"><span class="pstrut" style="height:3.8811010000000006em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.397439em;"><span></span></span></span></span></span></span></span></span></div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="23ffd9ec-15f9-4f28-ac29-eb83a978ccec"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%">This looks very similar to the derivative of the loss w.r.t the hidden layer before the activation function, i.e <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>m</mi></mrow></msub></mrow><annotation encoding="application/x-tex">Z_{{h_i},m}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>. In other words, the derivative of the loss w.r.t the activation is very useful as it can then be differentiated w.r.t the parameters in the function , making them learnable. </div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="337069dd-cad7-45ed-9ce1-83ccf8776463"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>a</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mi>k</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>α</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>k</mi></mrow></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\partial a_{h_{i}k}^{(m)}}{\partial \alpha_{{h_i},k}} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.0599999999999996em;vertical-align:-0.60822em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4517799999999998em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.0037em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3448em;margin-left:0em;margin-right:0.1em;"><span class="pstrut" style="height:2.65952em;"></span><span class="mord mathnormal mtight">i</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.31472em;"><span></span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3760285714285714em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.71042em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mtight"><span class="mord mathnormal mtight">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0590857142857142em;"><span style="top:-2.188485714285714em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5357142857142856em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3448em;margin-left:0em;margin-right:0.1em;"><span class="pstrut" style="height:2.65952em;"></span><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.31472em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.059085714285714em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5357142857142856em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5720285714285713em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.60822em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span><span>﻿</span></span>=0 for positive <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><mi>m</mi></mrow></msub></mrow><annotation encoding="application/x-tex">Z_{h_{i+1},m}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.975095em;vertical-align:-0.291765em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.291765em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> , and is equal to <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><mi>m</mi></mrow></msub></mrow><annotation encoding="application/x-tex">Z_{h_{i+1},m}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.975095em;vertical-align:-0.291765em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.291765em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> for non positive <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><mi>m</mi></mrow></msub></mrow><annotation encoding="application/x-tex">Z_{h_{i+1},m}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.975095em;vertical-align:-0.291765em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.291765em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>.</div></figure><h2 id="216be974-fe40-4f99-aabc-089774cf11a0" class="">In vectorized form, the formula is </h2><figure id="73d781fb-ce9e-4725-936f-8efd5b91ff4a" class="image"><a href="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/%25E6%2588%25AA%25E5%25B1%258F_2023-04-16_%25E4%25B8%258B%25E5%258D%25881.44.48.png"><img style="width:1177px" src="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/%25E6%2588%25AA%25E5%25B1%258F_2023-04-16_%25E4%25B8%258B%25E5%258D%25881.44.48.png"/></a></figure><h2 id="00da80ec-f2a1-4931-8780-4c1fab62b32c" class="">For channel wise alpha:</h2><figure id="5203aacb-dc19-41ed-9b1c-a83f19d4c2d6" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.1600em" columnspacing="1em"><mtr><mtd class ="mtr-glue"></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>α</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>k</mi></mrow></msub></mrow></mfrac><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>H</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></munderover><mtext> </mtext><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>z</mi><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>j</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow></mfrac><mfrac><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>z</mi><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>j</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>a</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mi>k</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow></mfrac><mfrac><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>a</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mi>k</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>α</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>k</mi></mrow></msub></mrow></mfrac></mrow></mstyle></mtd><mtd class ="mtr-glue"></mtd><mtd class ="mml-eqn-num"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation} \frac{\partial L}{\partial \alpha_{h_i,k}} = \sum_{j=1}^{H_{i+1}}\ \sum_{m=1}^{M} \frac{\partial L}{\partial z_{h_{i+1}j}^{(m)}} \frac{\partial z_{h_{i+1}j}^{(m)}}{\partial a_{h_{i}k}^{(m)}} \frac{\partial a_{h_{i}k}^{(m)}}{\partial \alpha_{{h_i},k}} \end{equation}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.2948780000000006em;vertical-align:-1.397439em;"></span><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8974390000000005em;"><span style="top:-3.8974390000000003em;"><span class="pstrut" style="height:3.8811010000000006em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.37144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.972108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8811010000000006em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3527700000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.08125em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace"> </span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.37144em;"><span style="top:-2.11em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.44307299999999994em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.2748em;"><span class="pstrut" style="height:3.0448em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.7218em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.377873em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8778730000000001em;"><span style="top:-2.11em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4014079999999999em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.2748em;"><span class="pstrut" style="height:3.0448em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.877873em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.44307299999999994em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.3362079999999998em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8362079999999998em;"><span style="top:-2.3588em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.2748em;"><span class="pstrut" style="height:3.0448em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.836208em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.40140799999999993em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.972108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.397439em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8974390000000005em;"><span style="top:-3.8974390000000003em;"><span class="pstrut" style="height:3.8811010000000006em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.397439em;"><span></span></span></span></span></span></span></span></span></div></figure><figure id="398fa5b1-e050-4e22-a787-deddd6a44e97" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.1600em" columnspacing="1em"><mtr><mtd class ="mtr-glue"></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>α</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>k</mi></mrow></msub></mrow></mfrac><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>H</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></munderover><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><msubsup><mrow><mi>d</mi><mi>z</mi></mrow><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><mi>j</mi></mrow><mi>m</mi></msubsup><msub><mi>W</mi><mrow><mrow><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>k</mi></mrow><mo>→</mo><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><mi>j</mi></mrow></mrow></msub><mfrac><mrow><mi mathvariant="normal">∂</mi><msubsup><mi>a</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mi>k</mi></mrow><mrow><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>α</mi><mrow><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>k</mi></mrow></msub></mrow></mfrac></mrow></mstyle></mtd><mtd class ="mtr-glue"></mtd><mtd class ="mml-eqn-num"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation} \frac{\partial L}{\partial \alpha_{h_i,k}} = \sum_{j=1}^{H_{i+1}} \sum_{m=1}^{M} {dz}^{m}_{h_{i+1},{j}} W_{{h_{i},k}\to {h_{i+1},j}} \frac{\partial a_{h_{i}k}^{(m)}}{\partial \alpha_{{h_i},k}} \end{equation}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.2948780000000006em;vertical-align:-1.397439em;"></span><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8974390000000005em;"><span style="top:-3.8974390000000003em;"><span class="pstrut" style="height:3.8811010000000006em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.37144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.972108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8811010000000006em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3527700000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:-0.08125em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.748732em;"><span style="top:-2.453em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span style="top:-3.1473400000000002em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.388765em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span><span class="mrel mtight">→</span><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32808571428571426em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.291765em;"><span></span></span></span></span></span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8362079999999998em;"><span style="top:-2.3588em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.2748em;"><span class="pstrut" style="height:3.0448em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.836208em;"><span class="pstrut" style="height:3.0448em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.398692em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.40140799999999993em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.972108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.397439em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8974390000000005em;"><span style="top:-3.8974390000000003em;"><span class="pstrut" style="height:3.8811010000000006em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.397439em;"><span></span></span></span></span></span></span></span></span></div></figure><h2 id="537ce349-5dd6-43a9-bafd-e522e169283b" class="">In vectorized form , the formula is:</h2><figure id="ad257db5-3051-435b-b631-b82fe087b022" class="image"><a href="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/IMG_0364.jpg"><img style="width:1220px" src="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/IMG_0364.jpg"/></a></figure><h2 id="f5e31652-e8e6-4640-8d00-a59ece8b1a36" class="">4) Implementation in TensorFlow by constructing a 6 hidden layer ANN</h2><h3 id="75a44175-75d5-458b-8960-5cdf45760405" class="">Shared alpha:</h3><pre id="164ed53f-6b7b-4b04-af76-1c01394e316e" class="code"><code>import numpy as np
+from scipy.special import expit as sigmoid
+from scipy.special import softmax as sm
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import math
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import log_loss
+from math import sqrt
+from math import log
+
+class NeuralNet(tf.keras.Model):
+    def __init__(self, num_features, num_hidden1,num_hidden2,num_hidden3,num_hidden4,num_hidden5,num_hidden6, alpha, alpha1,alpha2,alpha3,alpha4,alpha5,alpha6 ,max_epochs, num_output, _EPSILON):
+
+      super(NeuralNet, self).__init__()
+        
+      self.num_features = num_features
+      self.num_hidden1 = num_hidden1
+      self.num_hidden2 = num_hidden2
+      self.num_hidden3 = num_hidden3
+      self.num_hidden4 = num_hidden4
+      self.num_hidden5 = num_hidden5
+      self.num_hidden6 = num_hidden6
+      self.alpha = alpha
+      self.alpha1 = tf.Variable(tf.constant(alpha1),name=&#x27;alpha1&#x27;)
+      self.alpha2 = tf.Variable(tf.constant(alpha2),name=&#x27;alpha2&#x27;)
+      self.alpha3 = tf.Variable(tf.constant(alpha3),name=&#x27;alpha3&#x27;)
+      self.alpha4 = tf.Variable(tf.constant(alpha4),name=&#x27;alpha4&#x27;)
+      self.alpha5 = tf.Variable(tf.constant(alpha5),name=&#x27;alpha5&#x27;)
+      self.alpha6 = tf.Variable(tf.constant(alpha6),name=&#x27;alpha6&#x27;)
+      self.max_epochs = max_epochs
+      self.num_output = num_output
+      self._EPSILON = _EPSILON
+      self.loss = []
+      self.trainingaccur = []
+      self.devaccur = []
+        
+      self.Weights_Input_to_H1 = tf.Variable(tf.random.normal([self.num_hidden1, self.num_features], mean=0.0, stddev=0.1),name=&#x27;Weights_Input_to_H1&#x27;)
+      self.Bias_Input_to_H1 = tf.Variable(tf.zeros([self.num_hidden1, 1]),name=&#x27;Bias_Input_to_H1&#x27;)
+      self.Weights_H1_to_H2 = tf.Variable(tf.random.normal([self.num_hidden2, self.num_hidden1], mean=0.0, stddev=0.1),name=&#x27;Weights_H1_to_H2&#x27;)
+      self.Bias_H1_to_H2 = tf.Variable(tf.zeros([self.num_hidden2, 1]),name=&#x27;Bias_H1_to_H2&#x27;)
+      self.Weights_H2_to_H3 = tf.Variable(tf.random.normal([self.num_hidden3, self.num_hidden2], mean=0.0, stddev=0.1),name=&#x27;Weights_H2_to_H3&#x27;)
+      self.Bias_H2_to_H3 = tf.Variable(tf.zeros([self.num_hidden3, 1]),name=&#x27;Bias_H2_to_H3&#x27;)
+      self.Weights_H3_to_H4 = tf.Variable(tf.random.normal([self.num_hidden4, self.num_hidden3], mean=0.0, stddev=0.1),name=&#x27;Weights_H3_to_H4&#x27;)
+      self.Bias_H3_to_H4 = tf.Variable(tf.zeros([self.num_hidden4, 1]),name=&#x27;Bias_H3_to_H4&#x27;)
+      self.Weights_H4_to_H5 = tf.Variable(tf.random.normal([self.num_hidden5, self.num_hidden4], mean=0.0, stddev=0.1),name=&#x27;Weights_H4_to_H5&#x27;)
+      self.Bias_H4_to_H5 = tf.Variable(tf.zeros([self.num_hidden5, 1]),name=&#x27;Bias_H4_to_H5&#x27;)
+      self.Weights_H5_to_H6 = tf.Variable(tf.random.normal([self.num_hidden6, self.num_hidden5], mean=0.0, stddev=0.1),name=&#x27;Weights_H5_to_H6&#x27;)
+      self.Bias_H5_to_H6 = tf.Variable(tf.zeros([self.num_hidden6, 1]),name=&#x27;Bias_H5_to_H6&#x27;)
+      self.Weights_H6_to_output = tf.Variable(tf.random.normal([self.num_output, self.num_hidden6], mean=0.0, stddev=0.1),name=&#x27;Weights_H6_to_output&#x27;)
+      self.Bias_H6_to_output = tf.Variable(tf.zeros([self.num_output, 1]),name=&#x27;Bias_H6_to_output&#x27;)
+        
+      self.dWeights_Input_to_H1 = tf.Variable(tf.zeros([self.num_hidden1, self.num_features]),name=&#x27;dWeights_Input_to_H1&#x27;)
+      self.dBias_Input_to_H1 = tf.Variable(tf.zeros([self.num_hidden1, 1]),name=&#x27;dBias_Input_to_H1&#x27;)
+      self.dWeights_H1_to_H2 = tf.Variable(tf.zeros([self.num_hidden2, self.num_hidden1]),name=&#x27;dWeights_H1_to_H2&#x27;)
+      self.dBias_H1_to_H2 = tf.Variable(tf.zeros([self.num_hidden2, 1]),name=&#x27;dBias_H1_to_H2&#x27;)
+      self.dWeights_H2_to_H3 = tf.Variable(tf.zeros([self.num_hidden3, self.num_hidden2]),name=&#x27;dWeights_H2_to_H3&#x27;)
+      self.dBias_H2_to_H3 = tf.Variable(tf.zeros([self.num_hidden3, 1]),name=&#x27;dBias_H2_to_H3&#x27;)
+      self.dWeights_H3_to_H4 = tf.Variable(tf.zeros([self.num_hidden4, self.num_hidden3]),name=&#x27;dWeights_H3_to_H4&#x27;)
+      self.dBias_H3_to_H4 = tf.Variable(tf.zeros([self.num_hidden4, 1]),name=&#x27;dBias_H3_to_H4&#x27;)
+      self.dWeights_H4_to_H5 = tf.Variable(tf.zeros([self.num_hidden5, self.num_hidden4]),name=&#x27;dWeights_H4_to_H5&#x27;)
+      self.dBias_H4_to_H5 = tf.Variable(tf.zeros([self.num_hidden5, 1]),name=&#x27;dBias_H4_to_H5&#x27;)
+      self.dWeights_H5_to_H6 = tf.Variable(tf.zeros([self.num_hidden6, self.num_hidden5]),name=&#x27;dWeights_H5_to_H6&#x27;)
+      self.dBias_H5_to_H6 = tf.Variable(tf.zeros([self.num_hidden6, 1]),name=&#x27;dBias_H5_to_H6&#x27;)
+      self.dWeights_H6_to_output = tf.Variable(tf.zeros([self.num_output, self.num_hidden6]),name=&#x27;dWeights_H6_to_output&#x27;)
+      self.dBias_H6_to_output = tf.Variable(tf.zeros([self.num_output, 1]),name=&#x27;dBias_H6_to_output&#x27;)
+      
+    def relU(self, X):
+        return tf.where(X&lt;=0, 0, X)
+
+    def Para_relU(self, alpha, X):
+        return tf.where(X&lt;=0, alpha*X, X)
+
+    def Para_deriv_wrt_X(self, alpha, X):
+        return tf.where(X&lt;=0, alpha, 1)
+
+    def Para_deriv_wrt_alpha(self, alpha, X):
+        return tf.where(X&lt;=0, X, 0)
+
+    def deriv(self, X):
+        return tf.where(X&lt;=0, 0, 1)
+
+    def softmax(self, x):
+        e = x - tf.reduce_max(x, axis=0)
+        return tf.exp(e) / tf.reduce_sum(tf.exp(e), axis=0)
+
+    def forward(self, X):
+        self.z1 = tf.matmul(self.Weights_Input_to_H1, X) + self.Bias_Input_to_H1
+        self.a1 = self.Para_relU(self.alpha1, self.z1) 
+        self.z2 = tf.matmul(self.Weights_H1_to_H2, self.a1) + self.Bias_H1_to_H2
+        self.a2 = self.Para_relU(self.alpha2, self.z2) 
+        self.z3 = tf.matmul(self.Weights_H2_to_H3, self.a2) + self.Bias_H2_to_H3
+        self.a3 = self.Para_relU(self.alpha3, self.z3) 
+        self.z4 = tf.matmul(self.Weights_H3_to_H4, self.a3) + self.Bias_H3_to_H4
+        self.a4 = self.Para_relU(self.alpha4, self.z4)
+        self.z5 = tf.matmul(self.Weights_H4_to_H5, self.a4) + self.Bias_H4_to_H5
+        self.a5 = self.Para_relU(self.alpha5, self.z5)
+        self.z6 = tf.matmul(self.Weights_H5_to_H6, self.a5) + self.Bias_H5_to_H6
+        self.a6 = self.Para_relU(self.alpha6, self.z6)
+        self.z7 = tf.matmul(self.Weights_H6_to_output, self.a6) + self.Bias_H6_to_output
+        self.a7 = tf.nn.softmax(self.z7, axis=0)
+        return self.a7
+
+       
+
+    def backprop(self, X, t):
+      
+        self.dz7=(tf.reshape(self.a7, [self.num_output,-1])-tf.reshape(t, [self.num_output,-1]))/((X.shape[1]))
+        self.dBias_H6_to_output=tf.reduce_sum(self.dz7, axis=1, keepdims=True)
+        self.dWeights_H6_to_output=tf.matmul(self.dz7, tf.transpose(self.a6))
+        self.dz6=(tf.matmul(tf.transpose(self.Weights_H6_to_output), self.dz7)) * (self.Para_deriv_wrt_X(self.alpha6,self.z6))
+        self.dalpha6=(tf.matmul(tf.transpose(self.Weights_H6_to_output), self.dz7)) * (self.Para_deriv_wrt_alpha(self.alpha6,self.z6))
+        self.dalpha6_scalar=tf.reduce_sum(self.dalpha6)
+        self.dBias_H5_to_H6=tf.reduce_sum(self.dz6, axis=1, keepdims=True)
+        self.dWeights_H5_to_H6=tf.matmul(self.dz6, tf.transpose(self.a5))
+        self.dz5=(tf.matmul(tf.transpose(self.Weights_H5_to_H6), self.dz6)) * (self.Para_deriv_wrt_X(self.alpha5,self.z5))
+        self.dalpha5=(tf.matmul(tf.transpose(self.Weights_H5_to_H6), self.dz6)) * (self.Para_deriv_wrt_alpha(self.alpha5,self.z5))
+        self.dalpha5_scalar=tf.reduce_sum(self.dalpha5)
+        self.dBias_H4_to_H5=tf.reduce_sum(self.dz5, axis=1, keepdims=True)
+        self.dWeights_H4_to_H5=tf.matmul(self.dz5, tf.transpose(self.a4))
+        self.dz4=(tf.matmul(tf.transpose(self.Weights_H4_to_H5), self.dz5)) * (self.Para_deriv_wrt_X(self.alpha4,self.z4))
+        self.dalpha4=(tf.matmul(tf.transpose(self.Weights_H4_to_H5), self.dz5)) * (self.Para_deriv_wrt_alpha(self.alpha4,self.z4))
+        self.dalpha4_scalar=tf.reduce_sum(self.dalpha4)
+        self.dBias_H3_to_H4=tf.reduce_sum(self.dz4, axis=1, keepdims=True)
+        self.dWeights_H3_to_H4=tf.matmul(self.dz4, tf.transpose(self.a3))
+        self.dz3=(tf.matmul(tf.transpose(self.Weights_H3_to_H4), self.dz4)) * (self.Para_deriv_wrt_X(self.alpha3,self.z3))
+        self.dalpha3=(tf.matmul(tf.transpose(self.Weights_H3_to_H4), self.dz4)) * (self.Para_deriv_wrt_alpha(self.alpha3,self.z3))
+        self.dalpha3_scalar=tf.reduce_sum(self.dalpha3)
+        self.dBias_H2_to_H3=tf.reduce_sum(self.dz3, axis=1, keepdims=True)
+        self.dWeights_H2_to_H3=tf.matmul(self.dz3, tf.transpose(self.a2))
+        self.dz2=(tf.matmul(tf.transpose(self.Weights_H2_to_H3), self.dz3)) * (self.Para_deriv_wrt_X(self.alpha2,self.z2))
+        self.dalpha2=(tf.matmul(tf.transpose(self.Weights_H2_to_H3), self.dz3)) * (self.Para_deriv_wrt_alpha(self.alpha2,self.z2))
+        self.dalpha2_scalar=tf.reduce_sum(self.dalpha2)
+        self.dBias_H1_to_H2=tf.reduce_sum(self.dz2, axis=1, keepdims=True)
+        self.dWeights_H1_to_H2=tf.matmul(self.dz2, tf.transpose(self.a1))
+        self.dz1=(tf.matmul(tf.transpose(self.Weights_H1_to_H2), self.dz2)) * (self.Para_deriv_wrt_X(self.alpha1,self.z1))
+        self.dalpha1=(tf.matmul(tf.transpose(self.Weights_H1_to_H2), self.dz2)) * (self.Para_deriv_wrt_alpha(self.alpha1,self.z1))
+        self.dalpha1_scalar=tf.reduce_sum(self.dalpha1)
+        self.dBias_Input_to_H1=tf.reduce_sum(self.dz1, axis=1, keepdims=True)
+        self.dWeights_Input_to_H1=tf.matmul(self.dz1, tf.transpose(X))
+
+
+
+
+    def fit(self, x_train_data, y_train_data,x_dev_data,y_dev_data):
+       
+        
+        
+        for step in range(self.max_epochs):
+      
+            self.forward(x_train_data)
+            self.backprop(x_train_data, y_train_data)
+            self.Bias_H1_to_H2.assign_sub(self.alpha * self.dBias_H1_to_H2)
+            self.Weights_H1_to_H2.assign_sub(self.alpha * self.dWeights_H1_to_H2)
+            self.Bias_H2_to_H3.assign_sub(self.alpha * self.dBias_H2_to_H3)
+            self.Weights_H2_to_H3.assign_sub(self.alpha * self.dWeights_H2_to_H3)
+            self.Bias_H3_to_H4.assign_sub(self.alpha * self.dBias_H3_to_H4)
+            self.Weights_H3_to_H4.assign_sub(self.alpha * self.dWeights_H3_to_H4)
+            self.Bias_H4_to_H5.assign_sub(self.alpha * self.dBias_H4_to_H5)
+            self.Weights_H4_to_H5.assign_sub(self.alpha * self.dWeights_H4_to_H5)
+            self.Bias_H5_to_H6.assign_sub(self.alpha * self.dBias_H5_to_H6)
+            self.Weights_H5_to_H6.assign_sub(self.alpha * self.dWeights_H5_to_H6)
+            self.Bias_H6_to_output.assign_sub(self.alpha * self.dBias_H6_to_output)
+            self.Weights_H6_to_output.assign_sub(self.alpha * self.dWeights_H6_to_output)
+            self.Bias_Input_to_H1.assign_sub(self.alpha * self.dBias_Input_to_H1)
+            self.Weights_Input_to_H1.assign_sub(self.alpha * self.dWeights_Input_to_H1)
+            self.alpha1.assign_sub(self.alpha * self.dalpha1_scalar)
+            self.alpha2.assign_sub(self.alpha * self.dalpha2_scalar)
+            self.alpha3.assign_sub(self.alpha * self.dalpha3_scalar)
+            self.alpha4.assign_sub(self.alpha * self.dalpha4_scalar)
+            self.alpha5.assign_sub(self.alpha * self.dalpha5_scalar)
+            self.alpha6.assign_sub(self.alpha * self.dalpha6_scalar)
+            print(step)
+
+            if step % 100 == 0:
+              self.CCloss = tf.keras.losses.categorical_crossentropy(tf.transpose(y_train_data), tf.transpose(self.forward(x_train_data)), from_logits=False, label_smoothing=0)
+              self.CCloss=tf.reduce_mean(self.CCloss).numpy()
+              self.trainingaccuracy = accuracy_score(np.argmax(y_train_data.numpy(),axis=0), np.argmax(self.forward(x_train_data).numpy(),axis=0))
+              self.devaccuracy = accuracy_score(np.argmax(y_dev_data.numpy(),axis=0), np.argmax(self.forward(x_dev_data).numpy(),axis=0))
+              print(f&#x27;step: {step},  loss: {self.CCloss}&#x27;) 
+              print(self.trainingaccuracy)
+              print(self.devaccuracy)
+              self.loss.append(self.CCloss)
+              self.trainingaccur.append(self.trainingaccuracy)
+              self.devaccur.append(self.devaccuracy)
+              print(tf.reduce_mean(((self.dz7*60000)**2)))
+              print(self.alpha1.numpy(),self.dalpha1_scalar.numpy())
+              print(self.alpha2.numpy(),self.dalpha2_scalar.numpy())
+              print(self.alpha3.numpy(),self.dalpha3_scalar.numpy())
+              print(self.alpha4.numpy(),self.dalpha4_scalar.numpy())
+              print(self.alpha5.numpy(),self.dalpha5_scalar.numpy())
+              print(self.alpha6.numpy(),self.dalpha6_scalar.numpy())</code></pre><h3 id="79ad92d7-90bf-4559-9a50-987073ffcc3f" class="">Channel-wise alpha</h3><pre id="e5842fef-fa4e-423d-bcf7-3115a53ac1b5" class="code"><code>import numpy as np
+from scipy.special import expit as sigmoid
+from scipy.special import softmax as sm
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import math
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import log_loss
+from math import sqrt
+from math import log
+
+class NeuralNet(tf.keras.Model):
+    def __init__(self, num_features, num_hidden1,num_hidden2,num_hidden3,num_hidden4,num_hidden5,num_hidden6, alpha, alpha1,alpha2,alpha3,alpha4,alpha5,alpha6 ,max_epochs, num_output, _EPSILON):
+
+      super(NeuralNet, self).__init__()
+        
+      self.num_features = num_features
+      self.num_hidden1 = num_hidden1
+      self.num_hidden2 = num_hidden2
+      self.num_hidden3 = num_hidden3
+      self.num_hidden4 = num_hidden4
+      self.num_hidden5 = num_hidden5
+      self.num_hidden6 = num_hidden6
+      self.alpha = alpha
+      self.alpha1 = tf.Variable(alpha1 * tf.ones([self.num_hidden1, 1]))
+      self.alpha2 = tf.Variable(alpha2 * tf.ones([self.num_hidden2, 1]))
+      self.alpha3 = tf.Variable(alpha3 * tf.ones([self.num_hidden3, 1]))
+      self.alpha4 = tf.Variable(alpha4 * tf.ones([self.num_hidden4, 1]))
+      self.alpha5 = tf.Variable(alpha5 * tf.ones([self.num_hidden5, 1]))
+      self.alpha6 = tf.Variable(alpha6 * tf.ones([self.num_hidden6, 1]))
+      self.max_epochs = max_epochs
+      self.num_output = num_output
+      self._EPSILON = _EPSILON
+      self.loss = []
+      self.trainingaccur = []
+      self.devaccur = []
+        
+      self.Weights_Input_to_H1 = tf.Variable(tf.random.normal([self.num_hidden1, self.num_features], mean=0.0, stddev=0.1))
+      self.Bias_Input_to_H1 = tf.Variable(tf.zeros([self.num_hidden1, 1]))
+      self.Weights_H1_to_H2 = tf.Variable(tf.random.normal([self.num_hidden2, self.num_hidden1], mean=0.0, stddev=0.1))
+      self.Bias_H1_to_H2 = tf.Variable(tf.zeros([self.num_hidden2, 1]))
+      self.Weights_H2_to_H3 = tf.Variable(tf.random.normal([self.num_hidden3, self.num_hidden2], mean=0.0, stddev=0.1))
+      self.Bias_H2_to_H3 = tf.Variable(tf.zeros([self.num_hidden3, 1]))
+      self.Weights_H3_to_H4 = tf.Variable(tf.random.normal([self.num_hidden4, self.num_hidden3], mean=0.0, stddev=0.1))
+      self.Bias_H3_to_H4 = tf.Variable(tf.zeros([self.num_hidden4, 1]))
+      self.Weights_H4_to_H5 = tf.Variable(tf.random.normal([self.num_hidden5, self.num_hidden4], mean=0.0, stddev=0.1))
+      self.Bias_H4_to_H5 = tf.Variable(tf.zeros([self.num_hidden5, 1]))
+      self.Weights_H5_to_H6 = tf.Variable(tf.random.normal([self.num_hidden6, self.num_hidden5], mean=0.0, stddev=0.1))
+      self.Bias_H5_to_H6 = tf.Variable(tf.zeros([self.num_hidden6, 1]))
+      self.Weights_H6_to_output = tf.Variable(tf.random.normal([self.num_output, self.num_hidden6], mean=0.0, stddev=0.1))
+      self.Bias_H6_to_output = tf.Variable(tf.zeros([self.num_output, 1]))
+        
+      self.dWeights_Input_to_H1 = tf.Variable(tf.zeros([self.num_hidden1, self.num_features]))
+      self.dBias_Input_to_H1 = tf.Variable(tf.zeros([self.num_hidden1, 1]))
+      self.dWeights_H1_to_H2 = tf.Variable(tf.zeros([self.num_hidden2, self.num_hidden1]))
+      self.dBias_H1_to_H2 = tf.Variable(tf.zeros([self.num_hidden2, 1]))
+      self.dWeights_H2_to_H3 = tf.Variable(tf.zeros([self.num_hidden3, self.num_hidden2]))
+      self.dBias_H2_to_H3 = tf.Variable(tf.zeros([self.num_hidden3, 1]))
+      self.dWeights_H3_to_H4 = tf.Variable(tf.zeros([self.num_hidden4, self.num_hidden3]))
+      self.dBias_H3_to_H4 = tf.Variable(tf.zeros([self.num_hidden4, 1]))
+      self.dWeights_H4_to_H5 = tf.Variable(tf.zeros([self.num_hidden5, self.num_hidden4]))
+      self.dBias_H4_to_H5 = tf.Variable(tf.zeros([self.num_hidden5, 1]))
+      self.dWeights_H5_to_H6 = tf.Variable(tf.zeros([self.num_hidden6, self.num_hidden5]))
+      self.dBias_H5_to_H6 = tf.Variable(tf.zeros([self.num_hidden6, 1]))
+      self.dWeights_H6_to_output = tf.Variable(tf.zeros([self.num_output, self.num_hidden6]))
+      self.dBias_H6_to_output = tf.Variable(tf.zeros([self.num_output, 1]))
+      
+    def relU(self, X):
+        return tf.where(X&lt;=0, 0, X)
+
+    def Para_relU(self, alpha, X):
+        return tf.where(X&lt;=0, alpha*X, X)
+
+    def Para_deriv_wrt_X(self, alpha, X):
+        return tf.where(X&lt;=0, alpha, 1)
+
+    def Para_deriv_wrt_alpha(self, alpha, X):
+        return tf.where(X&lt;=0, X, 0)
+
+    def deriv(self, X):
+        return tf.where(X&lt;=0, 0, 1)
+
+    def softmax(self, x):
+        e = x - tf.reduce_max(x, axis=0)
+        return tf.exp(e) / tf.reduce_sum(tf.exp(e), axis=0)
+
+    def forward(self, X):
+        self.z1 = tf.matmul(self.Weights_Input_to_H1, X) + self.Bias_Input_to_H1
+        self.a1 = self.Para_relU(self.alpha1, self.z1) 
+        self.z2 = tf.matmul(self.Weights_H1_to_H2, self.a1) + self.Bias_H1_to_H2
+        self.a2 = self.Para_relU(self.alpha2, self.z2) 
+        self.z3 = tf.matmul(self.Weights_H2_to_H3, self.a2) + self.Bias_H2_to_H3
+        self.a3 = self.Para_relU(self.alpha3, self.z3) 
+        self.z4 = tf.matmul(self.Weights_H3_to_H4, self.a3) + self.Bias_H3_to_H4
+        self.a4 = self.Para_relU(self.alpha4, self.z4)
+        self.z5 = tf.matmul(self.Weights_H4_to_H5, self.a4) + self.Bias_H4_to_H5
+        self.a5 = self.Para_relU(self.alpha5, self.z5)
+        self.z6 = tf.matmul(self.Weights_H5_to_H6, self.a5) + self.Bias_H5_to_H6
+        self.a6 = self.Para_relU(self.alpha6, self.z6)
+        self.z7 = tf.matmul(self.Weights_H6_to_output, self.a6) + self.Bias_H6_to_output
+        self.a7 = tf.nn.softmax(self.z7, axis=0)
+        return self.a7
+
+       
+
+    def backprop(self, X, t):
+      
+        self.dz7=(tf.reshape(self.a7, [self.num_output,-1])-tf.reshape(t, [self.num_output,-1]))/((X.shape[1]))
+        self.dBias_H6_to_output=tf.reduce_sum(self.dz7, axis=1, keepdims=True)
+        self.dWeights_H6_to_output=tf.matmul(self.dz7, tf.transpose(self.a6))
+        self.dz6=(tf.matmul(tf.transpose(self.Weights_H6_to_output), self.dz7)) * (self.Para_deriv_wrt_X(self.alpha6,self.z6))
+        self.dalpha6=(tf.matmul(tf.transpose(self.Weights_H6_to_output), self.dz7)) * (self.Para_deriv_wrt_alpha(self.alpha6,self.z6))
+        self.dalpha6_scalar=tf.reduce_sum(self.dalpha6, axis=1, keepdims=True)
+        self.dBias_H5_to_H6=tf.reduce_sum(self.dz6, axis=1, keepdims=True)
+        self.dWeights_H5_to_H6=tf.matmul(self.dz6, tf.transpose(self.a5))
+        self.dz5=(tf.matmul(tf.transpose(self.Weights_H5_to_H6), self.dz6)) * (self.Para_deriv_wrt_X(self.alpha5,self.z5))
+        self.dalpha5=(tf.matmul(tf.transpose(self.Weights_H5_to_H6), self.dz6)) * (self.Para_deriv_wrt_alpha(self.alpha5,self.z5))
+        self.dalpha5_scalar=tf.reduce_sum(self.dalpha5, axis=1, keepdims=True)
+        self.dBias_H4_to_H5=tf.reduce_sum(self.dz5, axis=1, keepdims=True)
+        self.dWeights_H4_to_H5=tf.matmul(self.dz5, tf.transpose(self.a4))
+        self.dz4=(tf.matmul(tf.transpose(self.Weights_H4_to_H5), self.dz5)) * (self.Para_deriv_wrt_X(self.alpha4,self.z4))
+        self.dalpha4=(tf.matmul(tf.transpose(self.Weights_H4_to_H5), self.dz5)) * (self.Para_deriv_wrt_alpha(self.alpha4,self.z4))
+        self.dalpha4_scalar=tf.reduce_sum(self.dalpha4, axis=1, keepdims=True)
+        self.dBias_H3_to_H4=tf.reduce_sum(self.dz4, axis=1, keepdims=True)
+        self.dWeights_H3_to_H4=tf.matmul(self.dz4, tf.transpose(self.a3))
+        self.dz3=(tf.matmul(tf.transpose(self.Weights_H3_to_H4), self.dz4)) * (self.Para_deriv_wrt_X(self.alpha3,self.z3))
+        self.dalpha3=(tf.matmul(tf.transpose(self.Weights_H3_to_H4), self.dz4)) * (self.Para_deriv_wrt_alpha(self.alpha3,self.z3))
+        self.dalpha3_scalar=tf.reduce_sum(self.dalpha3, axis=1, keepdims=True)
+        self.dBias_H2_to_H3=tf.reduce_sum(self.dz3, axis=1, keepdims=True)
+        self.dWeights_H2_to_H3=tf.matmul(self.dz3, tf.transpose(self.a2))
+        self.dz2=(tf.matmul(tf.transpose(self.Weights_H2_to_H3), self.dz3)) * (self.Para_deriv_wrt_X(self.alpha2,self.z2))
+        self.dalpha2=(tf.matmul(tf.transpose(self.Weights_H2_to_H3), self.dz3)) * (self.Para_deriv_wrt_alpha(self.alpha2,self.z2))
+        self.dalpha2_scalar=tf.reduce_sum(self.dalpha2, axis=1, keepdims=True)
+        self.dBias_H1_to_H2=tf.reduce_sum(self.dz2, axis=1, keepdims=True)
+        self.dWeights_H1_to_H2=tf.matmul(self.dz2, tf.transpose(self.a1))
+        self.dz1=(tf.matmul(tf.transpose(self.Weights_H1_to_H2), self.dz2)) * (self.Para_deriv_wrt_X(self.alpha1,self.z1))
+        self.dalpha1=(tf.matmul(tf.transpose(self.Weights_H1_to_H2), self.dz2)) * (self.Para_deriv_wrt_alpha(self.alpha1,self.z1))
+        self.dalpha1_scalar=tf.reduce_sum(self.dalpha1, axis=1, keepdims=True)
+        self.dBias_Input_to_H1=tf.reduce_sum(self.dz1, axis=1, keepdims=True)
+        self.dWeights_Input_to_H1=tf.matmul(self.dz1, tf.transpose(X))
+
+
+
+
+    def fit(self, x_train_data, y_train_data,x_dev_data,y_dev_data):
+       
+        
+        
+        for step in range(self.max_epochs):
+      
+            self.forward(x_train_data)
+            self.backprop(x_train_data, y_train_data)
+            self.Bias_H1_to_H2.assign_sub(self.alpha * self.dBias_H1_to_H2)
+            self.Weights_H1_to_H2.assign_sub(self.alpha * self.dWeights_H1_to_H2)
+            self.Bias_H2_to_H3.assign_sub(self.alpha * self.dBias_H2_to_H3)
+            self.Weights_H2_to_H3.assign_sub(self.alpha * self.dWeights_H2_to_H3)
+            self.Bias_H3_to_H4.assign_sub(self.alpha * self.dBias_H3_to_H4)
+            self.Weights_H3_to_H4.assign_sub(self.alpha * self.dWeights_H3_to_H4)
+            self.Bias_H4_to_H5.assign_sub(self.alpha * self.dBias_H4_to_H5)
+            self.Weights_H4_to_H5.assign_sub(self.alpha * self.dWeights_H4_to_H5)
+            self.Bias_H5_to_H6.assign_sub(self.alpha * self.dBias_H5_to_H6)
+            self.Weights_H5_to_H6.assign_sub(self.alpha * self.dWeights_H5_to_H6)
+            self.Bias_H6_to_output.assign_sub(self.alpha * self.dBias_H6_to_output)
+            self.Weights_H6_to_output.assign_sub(self.alpha * self.dWeights_H6_to_output)
+            self.Bias_Input_to_H1.assign_sub(self.alpha * self.dBias_Input_to_H1)
+            self.Weights_Input_to_H1.assign_sub(self.alpha * self.dWeights_Input_to_H1)
+            self.alpha1.assign_sub(self.alpha * self.dalpha1_scalar)
+            self.alpha2.assign_sub(self.alpha * self.dalpha2_scalar)
+            self.alpha3.assign_sub(self.alpha * self.dalpha3_scalar)
+            self.alpha4.assign_sub(self.alpha * self.dalpha4_scalar)
+            self.alpha5.assign_sub(self.alpha * self.dalpha5_scalar)
+            self.alpha6.assign_sub(self.alpha * self.dalpha6_scalar)
+            print(step)
+
+            if step % 100 == 0:
+              #self.CCloss = tf.keras.losses.categorical_crossentropy(tf.transpose(y_train_data), tf.transpose(self.forward(x_train_data)), from_logits=False, label_smoothing=0)
+              self.CCloss=log_loss(np.transpose(y_train_data.numpy()),np.transpose(self.forward(x_train_data).numpy()),eps=self._EPSILON,normalize=True)
+              self.trainingaccuracy = accuracy_score(np.argmax(y_train_data.numpy(),axis=0), np.argmax(self.forward(x_train_data).numpy(),axis=0))
+              self.devaccuracy = accuracy_score(np.argmax(y_dev_data.numpy(),axis=0), np.argmax(self.forward(x_dev_data).numpy(),axis=0))
+              print(f&#x27;step: {step},  loss: {self.CCloss}&#x27;) 
+              print(self.trainingaccuracy)
+              print(self.devaccuracy)
+              self.loss.append(self.CCloss)
+              self.trainingaccur.append(self.trainingaccuracy)
+              self.devaccur.append(self.devaccuracy)
+              print(tf.reduce_mean(((self.dz7*60000)**2)).numpy())</code></pre><h2 id="79092803-7cfc-4586-abf9-693bb031b595" class="">5) Miscellaneous codes</h2><pre id="6a447e39-a452-402a-b2d5-605818f47903" class="code"><code>import numpy as np
+import tensorflow as tf
+from keras.datasets import mnist
+
+# Load the MNIST dataset
+(x_train, y_train), (x_test, y_test) = mnist.load_data()</code></pre><pre id="1dd8227e-8add-4554-8a67-d1eb1782e7b9" class="code"><code>X_train=tf.reshape(x_train, [60000, 784])
+X_test=tf.reshape(x_test, [10000, 784])</code></pre><pre id="7709e2e2-7687-47f5-b9c0-6593be53ed88" class="code"><code>X_train_floating=tf.cast(X_train, dtype=tf.float32)
+X_test_floating=tf.cast(X_test, dtype=tf.float32)</code></pre><pre id="f2c08170-e738-426d-a6f0-2d822a902433" class="code"><code>X_train_floating_scaled=((X_train_floating))/(255.0)
+X_test_floating_scaled=((X_test_floating))/(255.0)</code></pre><pre id="0388b234-7a85-4c2c-a6ee-8a5c266e54cc" class="code"><code>y_train_encoded=tf.one_hot(y_train,10)
+y_test_encoded=tf.one_hot(y_test,10)</code></pre><pre id="b79d1a32-f5a4-4981-b2de-f42bbe58fd9a" class="code"><code>X_train_floating_scaled=tf.transpose(X_train_floating_scaled)
+X_test_floating_scaled=tf.transpose(X_test_floating_scaled)</code></pre><pre id="46cbf3f3-1ef4-4cac-87d3-45ff15b741f7" class="code"><code>y_train_encoded=tf.transpose(y_train_encoded)
+y_test_encoded=tf.transpose(y_test_encoded)</code></pre><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="2c435513-a9b2-4cf7-b6c9-6cc590d57c73"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%">Run these to load an preprocess the MNST dataset. </div></figure><pre id="b8b08608-5412-4f20-b805-0adf1a0e9835" class="code"><code>numHidden1 = 400 # number of hidden nodes
+numHidden2 = 400# number of hidden nodes
+numHidden3 = 400# number of hidden nodes
+numHidden4 = 400# number of hidden nodes
+numHidden5 = 400# number of hidden nodes
+numHidden6 = 400# number of hidden nodes
+num_features = X_train_floating_scaled.shape[0]
+num_output = y_train_encoded.shape[0]
+max_epochs = 10000
+alpha = 0.001
+epsilon=0.00000000001
+alpha1=0.001
+alpha2=0.001
+alpha3=0.001
+alpha4=0.001
+alpha5=0.001
+alpha6=0.001
+NN = NeuralNet(num_features, numHidden1,numHidden2,numHidden3,numHidden4,numHidden5,numHidden6, alpha, alpha1,alpha2,alpha3,alpha4,alpha5,alpha6 ,max_epochs, num_output, epsilon)</code></pre><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="b6f25cd2-5fa9-405f-9607-b128d22e9293"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%">Run this to initialize the class. </div></figure><pre id="7ba3a941-0d8e-403d-961d-613e2987ca40" class="code"><code>NN.fit(X_train_floating_scaled,y_train_encoded,X_test_floating_scaled,y_test_encoded)</code></pre><h2 id="ae64b294-2cee-4365-a4cd-0b9c2da28b1b" class="">6) Analysis of the performances of both ANNs</h2><h2 id="37cc89cc-2cf6-44a9-927e-7c0b5639f784" class="">Let’s investigate the losses , training and dev accuracies of both networks.</h2><h3 id="69ec4495-2adf-4aa9-9eaa-3ff849b8745b" class="">For channel-wise alpha:</h3><pre id="da711948-1604-451a-a600-d6a80c91e7fd" class="code"><code>import matplotlib.pyplot as plt
+x_loss=range(0,len(NN.loss)*100,100)
+
+
+line1=plt.plot(x_loss,NN.loss,linestyle=&#x27;-&#x27;,label=&#x27;training loss&#x27;)  
+
+plt.title(&#x27;Training loss for channel wise alpha&#x27;)
+plt.xlabel(&#x27;Epochs&#x27;)
+plt.ylabel(&#x27;Training loss&#x27;)
+legend = plt.legend(loc=&#x27;best&#x27;, shadow=True)</code></pre><figure id="39dcb05c-1d85-4521-9b6f-5a9c5c738ba3" class="image"><a href="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/Untitled.png"><img style="width:580px" src="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/Untitled.png"/></a></figure><pre id="dd8a7896-a38f-4f17-b60b-7f7d1fe0968f" class="code"><code>x_training_accur=range(0,len(NN.trainingaccur)*100,100)
+x_devaccur=range(0,len(NN.devaccur)*100,100)
+
+line1=plt.plot(x_training_accur,NN.trainingaccur,linestyle=&#x27;-&#x27;,label=&#x27;training accuracy&#x27;) 
+line2=plt.plot(x_devaccur,NN.devaccur,linestyle=&#x27;-&#x27;,label=&#x27;dev accuracy&#x27;)
+                              
+plt.title(&#x27;Training and Dev Accuracies for channel wise alpha&#x27;)
+plt.xlabel(&#x27;Epochs&#x27;)
+plt.ylabel(&#x27;Accuracy&#x27;)
+legend = plt.legend(loc=&#x27;best&#x27;, shadow=True)</code></pre><figure id="513f5d11-26c4-4401-b84b-dadc4afed019" class="image"><a href="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/Untitled%201.png"><img style="width:584px" src="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/Untitled%201.png"/></a></figure><h3 id="76a3c17e-9e72-40fb-b152-c311e2459f60" class="">Shared alpha</h3><pre id="04ef67a3-9bd6-4203-8598-5aeb50dd6f31" class="code"><code>import matplotlib.pyplot as plt
+x_loss=range(0,len(NN.loss)*100,100)
+
+
+line1=plt.plot(x_loss,NN.loss,linestyle=&#x27;-&#x27;,label=&#x27;training loss&#x27;)  
+
+plt.title(&#x27;Training loss for shared alpha&#x27;)
+plt.xlabel(&#x27;Epochs&#x27;)
+plt.ylabel(&#x27;Training loss&#x27;)
+legend = plt.legend(loc=&#x27;best&#x27;, shadow=True)</code></pre><figure id="ef1b36a7-5eea-4dd2-aaf2-aa1a65da5cb5" class="image"><a href="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/Untitled%202.png"><img style="width:554px" src="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/Untitled%202.png"/></a></figure><pre id="4ce49754-2e9f-40c2-90ca-f80d70a0a48e" class="code"><code>x_training_accur=range(0,len(NN.trainingaccur)*100,100)
+x_devaccur=range(0,len(NN.devaccur)*100,100)
+
+line1=plt.plot(x_training_accur,NN.trainingaccur,linestyle=&#x27;-&#x27;,label=&#x27;training accuracy&#x27;) 
+line2=plt.plot(x_devaccur,NN.devaccur,linestyle=&#x27;-&#x27;,label=&#x27;dev accuracy&#x27;)
+                              
+plt.title(&#x27;Training and Dev Accuracies for shared alpha&#x27;)
+plt.xlabel(&#x27;Epochs&#x27;)
+plt.ylabel(&#x27;Accuracy&#x27;)
+legend = plt.legend(loc=&#x27;best&#x27;, shadow=True)</code></pre><figure id="b2c1d694-e9ee-49cf-aa1d-27866fffaae1" class="image"><a href="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/Untitled%203.png"><img style="width:567px" src="Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/Untitled%203.png"/></a></figure><h1 id="4474b5e1-8f0e-4782-8568-d9b458c54b4d" class="">6) Conclusion</h1><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="f06baaaf-b8b1-4d2b-b16c-c09ab672017e"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%">We managed to build ANNs with parametric ReLU as the activation for the hidden layers. The main takeaway from this project is that the derivative of the loss w.r.t the activation can be extremely useful as we can then differentiate it w.r.t the parameters in the activation, therefore making them learnable parameters. </div></figure><p id="bbe92f66-467d-4801-ad01-62a8e051b695" class="">
+</p></div></article></body></html>
