@@ -507,7 +507,7 @@ y_test_encoded=tf.transpose(y_test_encoded)
 ```
 
 <aside>
-⚠️ Run these to load an preprocess the MNST dataset.
+⚠️ Run these to load and preprocess the MNST dataset.
 
 </aside>
 
