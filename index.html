@@ -1056,7 +1056,7 @@ X_test_floating=tf.cast(X_test, dtype=tf.float32)</code></pre><pre id="f2c08170-
 X_test_floating_scaled=((X_test_floating))/(255.0)</code></pre><pre id="0388b234-7a85-4c2c-a6ee-8a5c266e54cc" class="code"><code>y_train_encoded=tf.one_hot(y_train,10)
 y_test_encoded=tf.one_hot(y_test,10)</code></pre><pre id="b79d1a32-f5a4-4981-b2de-f42bbe58fd9a" class="code"><code>X_train_floating_scaled=tf.transpose(X_train_floating_scaled)
 X_test_floating_scaled=tf.transpose(X_test_floating_scaled)</code></pre><pre id="46cbf3f3-1ef4-4cac-87d3-45ff15b741f7" class="code"><code>y_train_encoded=tf.transpose(y_train_encoded)
-y_test_encoded=tf.transpose(y_test_encoded)</code></pre><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="2c435513-a9b2-4cf7-b6c9-6cc590d57c73"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%">Run these to load an preprocess the MNST dataset. </div></figure><pre id="b8b08608-5412-4f20-b805-0adf1a0e9835" class="code"><code>numHidden1 = 400 # number of hidden nodes
+y_test_encoded=tf.transpose(y_test_encoded)</code></pre><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="2c435513-a9b2-4cf7-b6c9-6cc590d57c73"><div style="font-size:1.5em"><span class="icon">⚠️</span></div><div style="width:100%">Run these to load and preprocess the MNST dataset. </div></figure><pre id="b8b08608-5412-4f20-b805-0adf1a0e9835" class="code"><code>numHidden1 = 400 # number of hidden nodes
 numHidden2 = 400# number of hidden nodes
 numHidden3 = 400# number of hidden nodes
 numHidden4 = 400# number of hidden nodes
