@@ -35,7 +35,7 @@
 ![截屏 2023-04-16 下午1.13.26.png](Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/%25E6%2588%25AA%25E5%25B1%258F_2023-04-16_%25E4%25B8%258B%25E5%258D%25881.13.26.png)
 
 <aside>
-⚠️ $Z_i$ is the output of the hidden layer i before it is passed into the activation , which in this case is the Parametric ReLU.
+⚠️ ${Z_i}$ is the output of the hidden layer i before it is passed into the activation , which in this case is the Parametric ReLU.
 
 </aside>
 
