@@ -7,6 +7,8 @@
 
 </aside>
 
+### Alternatively , can use this link to access the HTML version of this md document : ##
+
 ## 1)Dataset description
 
 ### First , let’s talk a bit about the dataset I plan to use.
