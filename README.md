@@ -52,7 +52,7 @@ $$
 $$
 
 <aside>
-⚠️ This looks very similar to the derivative of the loss w.r.t the hidden layer before the activation function, i.e $\frac{\partial L}{\partial z_{{h_i},m}}$. In other words, the derivative of the loss w.r.t the activation is very useful as it can then be differentiated w.r.t the parameters in the function , making them learnable.
+⚠️ This looks very similar to the derivative of the loss w.r.t the hidden layer before the activation function, i.e $Z_{{h_i},m}$. In other words, the derivative of the loss w.r.t the activation is very useful as it can then be differentiated w.r.t the parameters in the function , making them learnable.
 
 </aside>
 
