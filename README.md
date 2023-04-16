@@ -541,6 +541,11 @@ NN = NeuralNet(num_features, numHidden1,numHidden2,numHidden3,numHidden4,numHidd
 NN.fit(X_train_floating_scaled,y_train_encoded,X_test_floating_scaled,y_test_encoded)
 ```
 
+<aside>
+⚠️ Run this to fit the ANN on the training dataset. 
+
+</aside>
+
 ## 6) Analysis of the performances of both ANNs
 
 ## Let’s investigate the losses , training and dev accuracies of both networks.
