@@ -7,7 +7,7 @@
 
 </aside>
 
-### Alternatively , can use this link to access the HTML version of this md document : ##
+### Alternatively , can use this link to access the HTML version of this md document : https://leeyz888.github.io/paraRELU/  ##
 
 ## 1)Dataset description
 
