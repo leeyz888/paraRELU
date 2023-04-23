@@ -612,7 +612,7 @@ legend = plt.legend(loc='best', shadow=True)
 
 ![Untitled](Parametric%20RELU%20ANNs%20842025a496a148c0a47ef6ba46f03cd6/Untitled%203.png)
 
-# 6) Conclusion
+# 7) Conclusion
 
 <aside>
 ⚠️ We managed to build ANNs with parametric ReLU as the activation for the hidden layers. The main takeaway from this project is that the derivative of the loss w.r.t the activation can be extremely useful as we can then differentiate it w.r.t the parameters in the activation, therefore making them learnable parameters.
